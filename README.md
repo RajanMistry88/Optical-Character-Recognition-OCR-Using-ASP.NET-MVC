@@ -1,4 +1,4 @@
-# Optical--Character-Reorganisation-OCR-Using-ASP.MVC
+# Optical-Character-Recognition-OCR-Using-ASP.MVC
 Read text from Image using Microsoft Office Document Imaging (MODI) in ASP.Net MVC 
 
 For this project we need the MODI
