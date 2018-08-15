@@ -1,0 +1,147 @@
+﻿@model OCR.Models.OCRModelClass
+@{
+    ViewBag.Title = "Index";
+}
+
+<h3></h3>
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<div class="panel panel-warning">
+    <div class="panel-heading">This will not give a 100% result but it will work. i have added some Demo image in Uploadfile Folder You can use that.</div>
+</div>
+
+@using (Html.BeginForm("Index", "OCR", FormMethod.Post, new { encType = "multipart/form-data" }))
+{
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Optical Character Recognition Module</div>
+                <div class="panel-body">
+                    <img id="imgLogoDisplay" title="Profile Image" src="" height="150" style="margin-bottom:3%;" /><br />
+
+                    <label>Upload Image</label>
+                    @Html.TextBox("file", "", new { type = "file", @class = "form-control clsAttachment" }) <br />
+                    <input type="submit" id="btnExtract" class="btn btn-success" value="Extract" />
+                    @ViewBag.Message
+                </div>
+            </div>
+        </div>
+        @if (ViewBag.ImageText != null)
+        {
+            <div class="col-md-8">
+                <div class="panel panel-info">
+                    <div class="panel-heading">@(ViewBag.ImageText != null ? "Extract Data From Image" : "Error" )</div>
+                    @(ViewBag.TotalPurchase != null && ViewBag.TotalLitre != null && ViewBag.TotalAmount != null ? "(Total Purchase: " + ViewBag.TotalPurchase + " | Total Liter: " + ViewBag.TotalLitre + " | Total Amount: " + ViewBag.TotalAmount + ")" : "" )
+                    <div class="panel-body">
+                        @ViewBag.ImageText
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#imgLogoDisplay').hide();
+    });
+    function readURL1(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imgLogoDisplay').attr('src', e.target.result);
+            }
+            // $("#imgLogoDisplay").val(input.files[0].name)
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $('.img-wrap .close').on('click', function () {
+        $('#imgLogoDisplay').attr("src", "");
+        $("#myImage").val("");
+    });
+
+    $(".clsAttachment").change(function () {
+        var errorArray = {};
+        $('#imgLogoDisplay').show();
+        var ext = $('.clsAttachment').val().split('.').pop().toLowerCase();
+        if ($.inArray(ext, ['png', 'jpg', 'jpeg']) == -1) {
+            errorArray["file"] = 'Invalid file! Please select only png, jpg, jpeg';
+            alert("Oops", "Invalid file! Please select only png, jpg, jpeg", "warning");
+            $("#file").val("");
+            centerModals();
+            $("#filealert").modal('show');
+            return false;
+        }
+        readURL1(this);
+    });
+
+    $("#btnExtract").click(function () {
+        $("#dvLoading").show();
+
+    });
+
+
+    function OnSuccess(e) {
+        $("#dvLoading").hide();
+        switch (e.msg) {
+            case "success":
+                swal({
+                    position: 'top-right',
+                    type: 'success',
+                    title: 'Sub-Category Successfully Added.',
+                    showConfirmButton: false,
+                    timer: 3000
+                })
+                setTimeout(function () {
+                    window.location.href = "/SubCategory/Index"
+                });
+                break;
+            case "wrong":
+                swal("Something went wrong Recode Not updated");
+                break;
+            default:
+                swal("We couldn't connect to the server!");
+        }
+    }
+
+</script>
+
+
+
+@*<div>
+    @Html.TextBox("file", "", new { type = "file", @class = "form-control" }) <br />*@
+@*<p>Select Language</p>
+            @Html.DropDownListFor(model => model.language, new List<SelectListItem>
+    {
+    new SelectListItem { Text = "CHINESE SIMPLIFIED", Value = "CHINESES_IMPLIFIED" },
+    new SelectListItem { Text = "CHINESE TRADITIONAL", Value = "CHINESE_TRADITIONAL" },
+    new SelectListItem { Text = "CZECH", Value = "CZECH" },
+    new SelectListItem { Text = "DANISH", Value = "DANISH" },
+    new SelectListItem { Text = "DUTCH", Value = "DUTCH" },
+    new SelectListItem { Text = "ENGLISH", Value = "ENGLISH" },
+    new SelectListItem { Text = "FINNISH", Value = "FINNISH" },
+    new SelectListItem { Text = "FRENCH", Value = "FRENCH" },
+    new SelectListItem { Text = "GERMAN", Value = "GERMAN" },
+    new SelectListItem { Text = "GREEK", Value = "GREEK" },
+    new SelectListItem { Text = "HUNGARIAN", Value = "HUNGARIAN" },
+    new SelectListItem { Text = "ITALIAN", Value = "ITALIAN" },
+    new SelectListItem { Text = "JAPANESE", Value = "JAPANESE" },
+    new SelectListItem { Text = "KOREAN", Value = "KOREAN" },
+    new SelectListItem { Text = "NORWEGIAN", Value = "NORWEGIAN" },
+    new SelectListItem { Text = "POLISH", Value = "POLISH" },
+    new SelectListItem { Text = "PORTUGUESE", Value = "PORTUGUESE" },
+    new SelectListItem { Text = "RUSSIAN", Value = "RUSSIAN" },
+    new SelectListItem { Text = "SPANISH", Value = "SPANISH" },
+    new SelectListItem { Text = "SWEDISH", Value = "SWEDISH" },
+    new SelectListItem { Text = "SYSDEFAULT", Value = "SYSDEFAULT" },
+    new SelectListItem { Text = "TURKISH", Value = "TURKISH" },
+    }, new {  @class = "form-control" })*@
+
+
+@*<input type="submit" class="btn btn-success" value="Convert" />
+
+
+    </div>*@
